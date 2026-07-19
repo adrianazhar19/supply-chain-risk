@@ -18,4 +18,9 @@ class ExchangeRate extends Model
         'fetched_at',
     ];
 
+    protected $casts = [
+        'fetched_at' => 'datetime',
+        'rate' => 'float',
+    ];
+
 }

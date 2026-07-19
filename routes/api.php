@@ -21,6 +21,9 @@ use App\Jobs\SyncWeatherJob;
 use App\Jobs\RecalculateRisksJob;
 
 // ── Countries ──────────────────────────────────────────────
+Route::get('/countries/summary', [CountryController::class, 'summary']);
+Route::get('/countries/top-risk', [CountryController::class, 'topRisk']);
+Route::get('/countries/top-gdp', [CountryController::class, 'topGdp']);
 Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/countries/{id}', [CountryController::class, 'show']);
 

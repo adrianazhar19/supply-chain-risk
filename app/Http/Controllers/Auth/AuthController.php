@@ -17,7 +17,11 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
-            return redirect()->intended('/dashboard');
+            // Redirect berdasarkan role jika sudah login
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('dashboard');
         }
         return view('auth.login');
     }
@@ -28,7 +32,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'string', 'email'],
+            'email'    => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
 
@@ -37,7 +41,12 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard')
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended(route('admin.dashboard'))
+                    ->with('toast_success', 'Selamat datang di Panel Admin, ' . Auth::user()->name . '!');
+            }
+
+            return redirect()->intended(route('dashboard'))
                 ->with('toast_success', 'Welcome back, ' . Auth::user()->name . '!');
         }
 

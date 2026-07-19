@@ -22,38 +22,37 @@ class RiskController extends Controller
      */
     public function index()
     {
-        $risks = RiskScore::with('country')
-            ->select('risk_scores.*')
-            ->join(DB::raw('(SELECT country_id, MAX(calculated_at) as max_calc FROM risk_scores GROUP BY country_id) as rs_latest'), function ($join) {
-                $join->on('risk_scores.country_id', '=', 'rs_latest.country_id')
-                     ->on('risk_scores.calculated_at', '=', 'rs_latest.max_calc');
-            })
-            ->orderBy('total_score', 'desc')
-            ->get()
-            ->map(function ($risk) {
-                $country = $risk->country;
-                return [
-                    'id'               => $risk->id,
-                    'country_id'       => $risk->country_id,
-                    'total_score'      => (float) $risk->total_score,
-                    'risk_level'       => $risk->risk_level,
-                    'weather_score'    => (float) $risk->weather_score,
-                    'inflation_score'  => (float) $risk->inflation_score,
-                    'political_score'  => (float) $risk->political_score,
-                    'currency_score'   => (float) $risk->currency_score,
-                    'calculated_at'    => $risk->calculated_at,
-                    'country' => $country ? [
-                        'id'        => $country->id,
-                        'name'      => $country->name,
-                        'code'      => $country->code,
-                        'region'    => $country->region,
-                        'currency'  => $country->currency,
-                        'latitude'  => (float) $country->latitude,
-                        'longitude' => (float) $country->longitude,
-                        'flag_url'  => 'https://flagcdn.com/w40/' . strtolower($country->code) . '.png',
-                    ] : null,
-                ];
-            });
+        $countries = \App\Models\Country::with(['riskScores' => function ($q) {
+                $q->latest('calculated_at');
+            }])
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get();
+
+        $risks = $countries->map(function ($country) {
+            $latestRisk = $country->riskScores->first();
+            return [
+                'id'               => $latestRisk ? $latestRisk->id : null,
+                'country_id'       => $country->id,
+                'total_score'      => $latestRisk ? (float) $latestRisk->total_score : null,
+                'risk_level'       => $latestRisk ? $latestRisk->risk_level : 'Unknown',
+                'weather_score'    => $latestRisk ? (float) $latestRisk->weather_score : null,
+                'inflation_score'  => $latestRisk ? (float) $latestRisk->inflation_score : null,
+                'political_score'  => $latestRisk ? (float) $latestRisk->political_score : null,
+                'currency_score'   => $latestRisk ? (float) $latestRisk->currency_score : null,
+                'calculated_at'    => $latestRisk ? $latestRisk->calculated_at : null,
+                'country' => [
+                    'id'        => $country->id,
+                    'name'      => $country->name,
+                    'code'      => $country->code,
+                    'region'    => $country->region,
+                    'currency'  => $country->currency,
+                    'latitude'  => $country->latitude !== null ? (float) $country->latitude : null,
+                    'longitude' => $country->longitude !== null ? (float) $country->longitude : null,
+                    'flag_url'  => 'https://flagcdn.com/w40/' . strtolower($country->code) . '.png',
+                ],
+            ];
+        });
 
         return response()->json([
             'status'  => true,

@@ -22,12 +22,10 @@ return Application::configure(
 )
 
 
-->withMiddleware(function (Middleware $middleware) {
-
-
-    //
-
-
+->withMiddleware(function ($middleware) {
+    $middleware->alias([
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+    ]);
 })
 
 

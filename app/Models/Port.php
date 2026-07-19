@@ -10,13 +10,13 @@ class Port extends Model
     use HasFactory;
 
     protected $fillable = [
-        'country_id',
         'name',
-        'wpi_code',
+        'country_id',
         'latitude',
         'longitude',
-        'harbor_size',
         'harbor_type',
+        'harbor_size',
+        'wpi_code'
     ];
 
     protected $casts = [

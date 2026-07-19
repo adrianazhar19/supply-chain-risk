@@ -11,13 +11,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('countries', function (Blueprint $table) {
-
-            $table->decimal('latitude',10,7)
-            ->nullable();
-
-            $table->decimal('longitude',10,7)
-            ->nullable();
-
+            if (!Schema::hasColumn('countries', 'latitude')) {
+                $table->decimal('latitude',10,7)->nullable();
+            }
+            if (!Schema::hasColumn('countries', 'longitude')) {
+                $table->decimal('longitude',10,7)->nullable();
+            }
         });
     }
 
@@ -25,13 +24,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('countries', function (Blueprint $table) {
-
-            $table->dropColumn([
-                'latitude',
-                'longitude'
-            ]);
-
+            if (Schema::hasColumn('countries', 'latitude')) {
+                $table->dropColumn('latitude');
+            }
+            if (Schema::hasColumn('countries', 'longitude')) {
+                $table->dropColumn('longitude');
+            }
         });
     }
-
 };
