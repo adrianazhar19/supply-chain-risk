@@ -41,7 +41,7 @@
                 <span class="badge-{{ strtolower($rl) }}">{{ $rl }}</span>
               </td>
               <td style="font-size:11px; color:var(--text-muted);">
-                {{ $w->recorded_at ? \Carbon\Carbon::parse($w->recorded_at)->format('d M Y H:i') : 'N/A' }}
+                {{ $w->fetched_at ? \Carbon\Carbon::parse($w->fetched_at)->format('d M Y H:i') : 'N/A' }}
               </td>
             </tr>
           @endforeach

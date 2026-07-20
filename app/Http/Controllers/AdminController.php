@@ -373,7 +373,7 @@ class AdminController extends Controller
 
     public function weather()
     {
-        $weathers = WeatherSnapshot::with('country')->orderBy('recorded_at', 'desc')->take(100)->get();
+        $weathers = WeatherSnapshot::with('country')->orderBy('fetched_at', 'desc')->take(100)->get();
         return view('admin.weather', compact('weathers'));
     }
 
@@ -383,7 +383,7 @@ class AdminController extends Controller
 
     public function risks()
     {
-        $risks = RiskScore::with('country')->orderBy('risk_score', 'desc')->get();
+        $risks = RiskScore::with('country')->orderBy('total_score', 'desc')->get();
         $riskDist = RiskScore::selectRaw('risk_level, COUNT(*) as count')
             ->groupBy('risk_level')
             ->get();
