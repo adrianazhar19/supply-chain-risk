@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   ADMIN DASHBOARD STYLE
+========================= */
+
+body{
+    background:#0f172a;
+    color:#f8fafc;
+    font-family:Inter,sans-serif;
+}
+
+.sidebar{
+    width:270px;
+    min-height:100vh;
+    background:#111827;
+}
+
+.sidebar a{
+    color:#d1d5db;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    color:#ffffff;
+    background:#1f2937;
+}
+
+.card{
+    background:#1e293b;
+    border:none;
+    border-radius:14px;
+    color:white;
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+.table{
+    color:white;
+}
+
+.table thead{
+    background:#334155;
+}
+
+.btn-primary{
+    background:#2563eb;
+    border:none;
+}
+
+.btn-primary:hover{
+    background:#1d4ed8;
+}
+
+.navbar{
+    background:#111827;
+}
+
+.content{
+    padding:25px;
+}
+
+.stat-card{
+    border-radius:15px;
+    padding:20px;
+    background:#1e293b;
+    color:white;
+}
+
+.chart-card{
+    background:#1e293b;
+    border-radius:15px;
+    padding:20px;
+}
+
+footer{
+    color:#94a3b8;
+}
