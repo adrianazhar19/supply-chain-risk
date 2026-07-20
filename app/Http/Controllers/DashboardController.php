@@ -18,6 +18,11 @@ class DashboardController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
+        // Auto-seed if database is empty on launch
+        if (Country::count() === 0) {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        }
+
         // 1. Initial counts for fast dashboard render
         $countriesCount = Country::count();
         $portsCount = Port::count();

@@ -214,6 +214,71 @@ class DemoDataSeeder extends Seeder
             }
         }
 
+        // 2.5 Seed additional random realistic news articles to reach 100+ articles
+        $allCountries = Country::all();
+        $newsTemplates = [
+            [
+                'title' => 'Custom Clearance Delays at Major Hubs',
+                'description' => 'Shippers report increased customs checking times causing backlog in delivery schedules.',
+                'source' => 'Logistics Portal',
+                'sentiment' => 'Negative'
+            ],
+            [
+                'title' => 'Port Modernization and Cargo Processing Upgrade',
+                'description' => 'Newly installed scanning gates and automated logistics routing speed up cargo clearance by 20%.',
+                'source' => 'Maritime Gazette',
+                'sentiment' => 'Positive'
+            ],
+            [
+                'title' => 'Fuel Surcharge Adjustments Affecting Sea Freight',
+                'description' => 'Carriers adjust bunker adjustment factors following changes in global marine fuel prices.',
+                'source' => 'Shipping Daily',
+                'sentiment' => 'Neutral'
+            ],
+            [
+                'title' => 'Weather Disruptions Slow down Shipping Operations',
+                'description' => 'Heavy seasonal rainfall and rough sea conditions lead to moderate terminal delays.',
+                'source' => 'World Weather Info',
+                'sentiment' => 'Negative'
+            ],
+            [
+                'title' => 'Bilateral Trade Agreements Open New Shipping Routes',
+                'description' => 'New agreements lower custom duties and streamline regulatory checks for regional logistics corridor.',
+                'source' => 'Global Trade News',
+                'sentiment' => 'Positive'
+            ]
+        ];
+
+        $seededNewsCount = NewsArticle::count();
+        $targetNewsCount = 100;
+        
+        if ($seededNewsCount < $targetNewsCount && $allCountries->count() > 0) {
+            $needed = $targetNewsCount - $seededNewsCount;
+            for ($i = 0; $i < $needed; $i++) {
+                $randomCountry = $allCountries->random();
+                $template = $newsTemplates[array_rand($newsTemplates)];
+                
+                $title = $template['title'] . ' in ' . $randomCountry->name . ' (' . ($i + 1) . ')';
+                $posCount = $template['sentiment'] === 'Positive' ? 4 : ($template['sentiment'] === 'Negative' ? 1 : 2);
+                $negCount = $template['sentiment'] === 'Negative' ? 4 : ($template['sentiment'] === 'Positive' ? 1 : 2);
+
+                NewsArticle::create([
+                    'country_id' => $randomCountry->id,
+                    'title' => $title,
+                    'description' => $template['description'],
+                    'url' => 'https://example.com/news/' . md5($title),
+                    'source_name' => $template['source'],
+                    'image_url' => 'https://picsum.photos/seed/' . md5($title) . '/600/400',
+                    'category' => 'shipping',
+                    'published_at' => now()->subHours(rand(1, 120)),
+                    'positive_score' => $posCount,
+                    'negative_score' => $negCount,
+                    'sentiment' => $template['sentiment'],
+                    'fetched_at' => now(),
+                ]);
+            }
+        }
+
         // 3. Compute Risk Scores for all countries using the service
         $riskService = resolve(RiskAssessmentService::class);
         $riskService->recalculateAll();

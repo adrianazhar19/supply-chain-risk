@@ -84,6 +84,11 @@ class AdminController extends Controller
 
     public function dashboard()
     {
+        // Auto-seed if database is empty on launch
+        if (Country::count() === 0) {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        }
+
         $stats = [
             'total_users'        => User::count(),
             'active_users'       => User::where('role', 'user')->count(),
