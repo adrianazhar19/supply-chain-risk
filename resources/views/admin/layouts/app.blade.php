@@ -16,11 +16,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
   
-  @vite([
-    'resources/css/app.css',
-    'resources/css/admin.css',
-    'resources/js/app.js'
-])
+  @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
   @yield('styles')
 </head>
 <body>

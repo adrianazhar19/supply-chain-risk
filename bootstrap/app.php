@@ -26,6 +26,8 @@ return Application::configure(
     $middleware->alias([
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ]);
+
+    $middleware->trustProxies(at: '*');
 })
 
 
