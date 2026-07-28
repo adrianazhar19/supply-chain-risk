@@ -1,59 +1,325 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🌍 Supply Chain Risk Intelligence
+### Enterprise Global Supply Chain Monitoring Platform
 
-## About Laravel
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+*Enterprise web platform untuk memantau risiko rantai pasok global melalui visualisasi data, integrasi Multi-API, analisis risiko, dan dashboard interaktif.*
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# 📖 About Project
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**Supply Chain Risk Intelligence** merupakan aplikasi berbasis web yang dibangun menggunakan **Laravel 12** untuk membantu perusahaan maupun organisasi dalam melakukan monitoring kondisi rantai pasok global secara real-time.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Sistem mengintegrasikan berbagai sumber data seperti informasi negara, pelabuhan dunia, cuaca, nilai tukar mata uang, serta berita internasional sehingga pengguna dapat melakukan analisis risiko dengan lebih cepat dan akurat.
 
-## Laravel Sponsors
+Selain itu sistem menyediakan **Dashboard User** dan **Dashboard Administrator** yang memiliki hak akses berbeda menggunakan **Role Based Access Control (RBAC).**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+# ✨ Main Features
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 👤 User Features
 
-## Contributing
+| Feature | Description |
+|---------|-------------|
+| Dashboard Overview | Menampilkan ringkasan kondisi Supply Chain Global |
+| Global Supply Chain Threat Map | Visualisasi peta dunia menggunakan Leaflet |
+| Risk Analytics | Analisis tingkat risiko tiap negara |
+| Compare Countries | Membandingkan kondisi dua negara |
+| Countries | Informasi lengkap negara |
+| Port Intelligence | Informasi pelabuhan dunia |
+| News Center | Berita internasional secara real-time |
+| Exchange Rates | Nilai tukar mata uang |
+| Weather Intelligence | Monitoring cuaca dunia |
+| Watchlist | Menyimpan negara favorit |
+| Reports | Laporan monitoring |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 👨‍💼 Administrator Features
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Feature | Description |
+|---------|-------------|
+| Admin Dashboard | Dashboard monitoring administrator |
+| User Management | CRUD User |
+| Countries Management | CRUD Negara |
+| Ports Management | CRUD Pelabuhan |
+| News Management | CRUD Berita |
+| Exchange Rates Management | Kelola nilai tukar mata uang |
+| Weather Management | Kelola data cuaca |
+| Risk Analytics | Monitoring tingkat risiko |
+| Reports | Laporan Sistem |
+| Settings | Pengaturan aplikasi |
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 📊 Dashboard Features
 
-## License
+- Interactive Dashboard
+- Global Port Map
+- Country Comparison
+- Interactive Charts (Chart.js)
+- Leaflet Interactive Map
+- Risk Distribution
+- News Monitoring
+- Weather Monitoring
+- Exchange Rate Monitoring
+- User Authentication
+- Admin Panel
+- Role Based Access Control
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+# 🛠️ Technology Stack
+
+| Layer | Technology |
+|---------|------------|
+| Backend | Laravel 12 |
+| Programming Language | PHP 8.3 |
+| Database | MySQL |
+| Frontend | Bootstrap 5 |
+| CSS | Tailwind CSS & Custom CSS |
+| Charts | Chart.js |
+| Maps | Leaflet.js |
+| API | REST API |
+| Authentication | Laravel Authentication |
+| Version Control | Git & GitHub |
+
+---
+
+# 🌐 APIs Used
+
+- REST Countries API
+- Open-Meteo API
+- Exchange Rate API
+- GNews API
+- OpenStreetMap API
+
+---
+
+# 📸 Application Preview
+
+## User Dashboard
+
+- Dashboard Overview
+- Risk Analytics
+- Global Threat Map
+- News Center
+- Exchange Rates
+- Weather Intelligence
+
+## Admin Dashboard
+
+- Dashboard Overview
+- User Management
+- Countries Management
+- Ports Management
+- News Management
+- Risk Analytics
+- Reports
+- Settings
+
+---
+
+# ⚙️ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/adrianazhar19/supply-chain-risk.git
+```
+
+Masuk ke folder project
+
+```bash
+cd supply-chain-risk
+```
+
+Install dependency
+
+```bash
+composer install
+```
+
+Copy file environment
+
+```bash
+cp .env.example .env
+```
+
+Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+Konfigurasi Database
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=supply_chain_risk
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Jalankan Migrasi
+
+```bash
+php artisan migrate
+```
+
+Jalankan Seeder (Opsional)
+
+```bash
+php artisan db:seed
+```
+
+Jalankan Server
+
+```bash
+php artisan serve
+```
+
+Buka browser
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# 🔐 Authentication
+
+Sistem menggunakan **Role Based Access Control (RBAC)**
+
+### User
+
+- Dashboard
+- Monitoring
+- Watchlist
+- Reports
+
+### Administrator
+
+- Dashboard Admin
+- CRUD User
+- CRUD Countries
+- CRUD Ports
+- CRUD News
+- Reports
+- Settings
+
+---
+
+# 🗺️ Routes
+
+| Route | Description |
+|---------|------------|
+| /login | Login User |
+| /register | Register User |
+| /dashboard | User Dashboard |
+| /countries | Countries |
+| /ports | Port Intelligence |
+| /news | News Center |
+| /exchange-rates | Exchange Rates |
+| /weather | Weather Intelligence |
+| /reports | Reports |
+| /watchlist | Watchlist |
+| /admin/dashboard | Admin Dashboard |
+| /admin/users | User Management |
+| /admin/countries | Countries Management |
+| /admin/ports | Ports Management |
+| /admin/news | News Management |
+
+---
+
+# 📂 Project Structure
+
+```
+supply-chain-risk/
+
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+├── public/
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+├── routes/
+├── storage/
+├── tests/
+├── vendor/
+├── artisan
+├── composer.json
+└── package.json
+```
+
+---
+
+# 🗄️ Database
+
+Main Tables
+
+- users
+- countries
+- ports
+- risk_scores
+- exchange_rates
+- weather_data
+- news_articles
+- watchlists
+
+---
+
+# 🔒 Security
+
+- Authentication
+- Authorization
+- Role Based Access Control (RBAC)
+- CSRF Protection
+- Password Hashing
+- Middleware Protection
+
+---
+
+# 👨‍💻 Developer
+
+**Adrian Azhar**
+
+Universitas Harapan Medan
+
+GitHub
+
+https://github.com/adrianazhar19
+
+---
+
+# 📄 License
+
+Project ini dibuat untuk keperluan **Tugas Akhir, Penelitian, dan Pembelajaran**.
+
+---
+
+<div align="center">
+
+### ⭐ Supply Chain Risk Intelligence ⭐
+
+**Enterprise Global Supply Chain Monitoring Platform**
+
+Developed using ❤️ Laravel 12 • Bootstrap 5 • Chart.js • Leaflet.js
+
+https://supply-chain-risk-production-fa94.up.railway.app
+
+</div>
