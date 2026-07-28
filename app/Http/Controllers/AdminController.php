@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -363,18 +364,59 @@ class AdminController extends Controller
 
     public function rates()
     {
-        $rates = ExchangeRate::orderBy('target_currency')->get();
+        $targetCurrencies = ['EUR', 'GBP', 'JPY', 'CNY', 'IDR', 'AUD', 'SGD', 'CAD'];
+        $rates = collect();
+        foreach ($targetCurrencies as $code) {
+            $rate = ExchangeRate::where('target_currency', $code)
+                ->latest('fetched_at')
+                ->first();
+            if ($rate) {
+                $rates->push($rate);
+            }
+        }
+
+        if ($rates->isEmpty()) {
+            $rates = ExchangeRate::orderBy('target_currency')->get();
+        } else {
+            $rates = $rates->sortBy('target_currency')->values();
+        }
+
         return view('admin.rates', compact('rates'));
     }
 
+
     // ═══════════════════════════════════════
     // WEATHER
+
     // ═══════════════════════════════════════
 
     public function weather()
     {
         $weathers = WeatherSnapshot::with('country')->orderBy('fetched_at', 'desc')->take(100)->get();
         return view('admin.weather', compact('weathers'));
+    }
+
+    public function syncWeather(\App\Services\OpenMeteoService $service)
+    {
+        $countries = Country::whereNotNull('latitude')->get();
+        $count = 0;
+
+        foreach ($countries as $country) {
+            try {
+                $service->forceRefresh($country);
+                $count++;
+            } catch (\Exception $e) {
+                // Ignore and continue
+            }
+        }
+
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'action'      => 'WEATHER_SYNC',
+            'description' => "Manually synchronized weather data for {$count} countries.",
+        ]);
+
+        return back()->with('toast_success', "Kondisi cuaca berhasil diperbarui untuk {$count} negara.");
     }
 
     // ═══════════════════════════════════════

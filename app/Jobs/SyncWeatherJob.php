@@ -17,32 +17,27 @@ class SyncWeatherJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries   = 2;
-    public int $timeout = 180;
+    public int $timeout = 300;
     public int $backoff = 60;
 
-    protected array $priorityCodes;
-
-    public function __construct(array $countryCodes = [])
+    public function __construct()
     {
         $this->onQueue('default');
-        $this->priorityCodes = $countryCodes ?: ['US','CN','JP','DE','GB','ID','SG','BR','IN','AU','FR','CA','KR','RU','NL'];
     }
 
     public function handle(OpenMeteoService $service): void
     {
-        Log::info('SyncWeatherJob: Starting weather sync for ' . count($this->priorityCodes) . ' countries...');
+        $countries = Country::whereNotNull('latitude')->get();
+        Log::info('SyncWeatherJob: Starting weather sync for ' . $countries->count() . ' countries...');
 
         $synced  = 0;
         $failed  = 0;
-        $countries = Country::whereIn('code', $this->priorityCodes)
-            ->whereNotNull('latitude')
-            ->get();
 
         foreach ($countries as $country) {
             try {
                 $service->forceRefresh($country);
                 $synced++;
-                usleep(200000); // 200ms throttle between requests
+                usleep(150000); 
             } catch (\Exception $e) {
                 $failed++;
                 Log::warning("SyncWeatherJob: Failed for {$country->name}: " . $e->getMessage());

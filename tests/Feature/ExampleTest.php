@@ -45,7 +45,7 @@ class ExampleTest extends TestCase
         $response = $this->actingAs($user)->get('/dashboard');
 
         $response->assertStatus(200);
-        $response->assertSee('Supply Chain Risks');
+        $response->assertSee('Supply Chain Risk Intelligence');
     }
 
     /**

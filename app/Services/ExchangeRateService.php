@@ -41,7 +41,7 @@ class ExchangeRateService
 
     public function __construct()
     {
-        $this->baseUrl = config('services.exchangerate.url', 'https://api.exchangerate-api.com/v4');
+        $this->baseUrl = 'https://v6.exchangerate-api.com/v6';
     }
 
     /* ─── Public API ──────────────────────────────────────── */
@@ -53,16 +53,19 @@ class ExchangeRateService
     {
         return Cache::remember('exchange_rates_usd_v3', now()->addHours(self::CACHE_TTL_HOURS), function () {
             $rates = $this->fetchFromApi();
+            $source = 'live';
 
             if (empty($rates)) {
                 $rates = $this->fetchFromDatabase();
+                $source = 'database';
             }
 
             if (empty($rates)) {
                 $rates = $this->getDefaultRates();
+                $source = 'fallback';
                 Log::warning('ExchangeRate: Using hardcoded fallback rates.');
-            } else {
-                // Persist fresh rates to DB
+            } elseif ($source === 'live') {
+                // Persist fresh rates to DB only if fetched successfully from live API
                 $this->persistRates($rates);
             }
 
@@ -70,7 +73,7 @@ class ExchangeRateService
                 'rates'      => $rates,
                 'base'       => 'USD',
                 'fetched_at' => now()->toIso8601String(),
-                'source'     => empty($rates) ? 'fallback' : 'live',
+                'source'     => $source,
             ];
         });
     }
@@ -96,34 +99,35 @@ class ExchangeRateService
 
     private function fetchFromApi(): array
     {
-        $endpoints = [
-            "{$this->baseUrl}/latest/USD",
-            'https://open.er-api.com/v6/latest/USD',   // Free no-key fallback
-        ];
+        $apiKey = env('EXCHANGE_API_KEY');
+        if (empty($apiKey)) {
+            Log::warning('ExchangeRate: EXCHANGE_API_KEY is not configured in env.');
+            return [];
+        }
 
-        foreach ($endpoints as $url) {
-            try {
-                $response = Http::timeout(self::TIMEOUT)->get($url);
+        $url = "{$this->baseUrl}/{$apiKey}/latest/USD";
 
-                if ($response->successful()) {
-                    $json  = $response->json();
-                    $rates = $json['rates'] ?? $json['conversion_rates'] ?? [];
+        try {
+            $response = Http::timeout(self::TIMEOUT)->get($url);
 
-                    if (!empty($rates)) {
-                        $filtered = [];
-                        foreach (self::$TARGETS as $code) {
-                            if (isset($rates[$code])) {
-                                $filtered[$code] = (float) $rates[$code];
-                            }
-                        }
-                        if (!empty($filtered)) {
-                            return $filtered;
+            if ($response->successful()) {
+                $json  = $response->json();
+                $rates = $json['rates'] ?? $json['conversion_rates'] ?? [];
+
+                if (!empty($rates)) {
+                    $filtered = [];
+                    foreach (self::$TARGETS as $code) {
+                        if (isset($rates[$code])) {
+                            $filtered[$code] = (float) $rates[$code];
                         }
                     }
+                    if (!empty($filtered)) {
+                        return $filtered;
+                    }
                 }
-            } catch (\Exception $e) {
-                Log::warning("ExchangeRate API failed ({$url}): " . $e->getMessage());
             }
+        } catch (\Exception $e) {
+            Log::warning("ExchangeRate API failed ({$url}): " . $e->getMessage());
         }
 
         return [];

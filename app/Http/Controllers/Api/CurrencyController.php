@@ -20,17 +20,24 @@ class CurrencyController extends Controller
     {
         $targetCurrencies = ['EUR', 'GBP', 'JPY', 'CNY', 'SGD', 'IDR', 'AUD', 'CAD'];
         
-        // 1. Verify history count and auto-generate 30 days history if empty or only 1 record exists per pair
+        // ─────────────────────────────────────────────────────────────
+        // FIX: Jangan pernah truncate tabel exchange_rates.
+        // Hanya tambahkan data historis untuk hari-hari yang belum ada.
+        // Kondisi: jika kurang dari 7 hari unik data historis per currency.
+        // ─────────────────────────────────────────────────────────────
         $hasLowHistory = false;
         foreach ($targetCurrencies as $code) {
-            if (ExchangeRate::where('target_currency', $code)->count() <= 1) {
+            $daysCount = ExchangeRate::where('target_currency', $code)
+                ->selectRaw('COUNT(DISTINCT DATE(fetched_at)) as days')
+                ->value('days');
+
+            if ((int)$daysCount < 7) {
                 $hasLowHistory = true;
                 break;
             }
         }
 
         if ($hasLowHistory) {
-            ExchangeRate::truncate();
             $baseRates = [
                 'EUR' => 0.9200,
                 'GBP' => 0.7800,
@@ -42,19 +49,30 @@ class CurrencyController extends Controller
                 'CAD' => 1.3600,
             ];
 
-            for ($i = 30; $i >= 0; $i--) {
-                $date = now()->subDays($i);
+            // Tambahkan data historis HANYA untuk hari yang belum ada (append-only)
+            for ($i = 30; $i >= 1; $i--) {
+                $date    = now()->subDays($i)->startOfDay();
+                $dateStr = $date->format('Y-m-d');
+
                 foreach ($targetCurrencies as $code) {
-                    $variation = (rand(-150, 150) / 10000) * $baseRates[$code];
-                    ExchangeRate::create([
-                        'base_currency'   => 'USD',
-                        'target_currency' => $code,
-                        'rate'            => $baseRates[$code] + $variation,
-                        'fetched_at'      => $date,
-                    ]);
+                    $exists = ExchangeRate::where('target_currency', $code)
+                        ->whereDate('fetched_at', $dateStr)
+                        ->exists();
+
+                    if (!$exists) {
+                        $base      = $baseRates[$code] ?? 1.0;
+                        $variation = (rand(-150, 150) / 10000) * $base;
+                        ExchangeRate::create([
+                            'base_currency'   => 'USD',
+                            'target_currency' => $code,
+                            'rate'            => round($base + $variation, 8),
+                            'fetched_at'      => $date,
+                        ]);
+                    }
                 }
             }
         }
+
 
         // 2. Get latest rates (triggers sync/cache)
         $latest = $this->exchangeRate->getLatestRates();

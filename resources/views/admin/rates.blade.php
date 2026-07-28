@@ -26,12 +26,12 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($rates as $i => $r)
+          @foreach($rates as $r)
             <tr>
-              <td>{{ $i + 1 }}</td>
+              <td>{{ $loop->iteration }}</td>
               <td><span class="badge-user">{{ $r->base_currency ?? 'USD' }}</span></td>
               <td><strong style="font-size:13px;">{{ $r->target_currency }}</strong></td>
-              <td><strong style="font-size:14px; color:var(--primary);">{{ number_format($r->exchange_rate, 6) }}</strong></td>
+              <td><strong style="font-size:14px; color:var(--primary);">{{ number_format($r->rate, 6) }}</strong></td>
               <td style="font-size:12px; color:var(--text-muted);">{{ $r->updated_at->diffForHumans() }}</td>
               <td><span class="badge-online">Synchronized</span></td>
             </tr>

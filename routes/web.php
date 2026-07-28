@@ -66,6 +66,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
 
     // Weather
     Route::get('/weather', [AdminController::class, 'weather'])->name('weather');
+    Route::post('/weather/sync', [AdminController::class, 'syncWeather'])->name('weather.sync');
 
     // Risk Analytics
     Route::get('/risks', [AdminController::class, 'risks'])->name('risks');
